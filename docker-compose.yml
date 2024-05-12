@@ -1,0 +1,31 @@
+services:
+  app:
+    image: golang-local:latest
+    container_name: golang-local
+    cpus: "2"
+    mem_limit: "6g"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - mysql
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DB=app
+
+  mysql:
+    image: mysql:8
+    cpus: "2"
+    mem_limit: "6g"
+    ports:
+      - "3366:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: app
+    volumes:
+      - mysql_app_data:/var/lib/mysql
+
+volumes:
+  mysql_app_data:
